@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Checklist;
+use App\Http\Controllers\Checklistitem;
 use App\Http\Controllers\Products;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -30,5 +31,10 @@ Route::group(['middleware' => ['jwt.verify']], function() {
     Route::get('/checklist', Checklist::class . '@index');
     Route::post('/checklist', Checklist::class . '@create');
     Route::delete('/checklist/{id}', Checklist::class . '@destroy');
+    Route::get('/checklist/{checklistid}/item', Checklistitem::class . '@index');
+    Route::post('/checklist/{checklistid}/item', Checklistitem::class . '@create');
+    Route::put('/checklist/{checklistid}/item/{checklistitemid}', Checklist::class . '@update');
+    Route::delete('/checklist/{checklistid}/item/{checklistitemid}', Checklist::class . '@destroy');
+    Route::put('/checklist/{checklistid}/item/rename/{checklistitemid}', Checklist::class . '@rename');
 
 });

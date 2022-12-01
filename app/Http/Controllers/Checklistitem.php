@@ -29,13 +29,12 @@ class Checklistitem extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(Request $request)
+    public function create(Request $request, $checklistid)
     {
         //
 
         $validator = Validator::make($request->all(), [
             'name' => 'required',
-            'checklist_id' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -44,7 +43,12 @@ class Checklistitem extends Controller
                 'message' => $validator->errors()->first()
             ], 400);
         }
-        $data = \App\Models\Checklist::create($request->all());
+        $data = \App\Models\Checklist::create(
+            [
+                'name' => $request->name,
+                'checklist_id' => $checklistid
+            ]
+        );
         return response()->json([
             'message' => 'Checklist created',
             'data' => $data
@@ -102,8 +106,49 @@ class Checklistitem extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($checklistid)
     {
         //
+        $model = ModelsChecklistItem::find($checklistid);
+
+        if ($model != null) {
+            $model->delete();
+            return response()->json([
+                'message' => 'Checklist item deleted',
+                'data' => $model
+            ], 200);
+        } else {
+            return response()->json([
+                'message' => 'Checklist item not found',
+                'data' => $model
+            ], 404);
+        }
+    }
+    public function rename($checklistid, $checklistitemid, Request $request)
+    {
+        $model = ModelsChecklistItem::find($checklistid);
+        $validator = Validator::make($request->all(), [
+            'name' => 'required',
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $validator->errors()->first()
+            ], 400);
+        }
+
+        if ($model != null) {
+            $model->name = $request->name;
+            $model->save();
+            return response()->json([
+                'message' => 'Checklist item renamed',
+                'data' => $model
+            ], 200);
+        } else {
+            return response()->json([
+                'message' => 'Checklist item not found',
+                'data' => $model
+            ], 404);
+        }
     }
 }
