@@ -31,6 +31,8 @@ Route::group(['middleware' => ['jwt.verify']], function() {
     Route::get('/checklist', Checklist::class . '@index');
     Route::post('/checklist', Checklist::class . '@create');
     Route::delete('/checklist/{id}', Checklist::class . '@destroy');
+
+
     Route::get('/checklist/{checklistid}/item', Checklistitem::class . '@index');
     Route::post('/checklist/{checklistid}/item', Checklistitem::class . '@create');
     Route::put('/checklist/{checklistid}/item/{checklistitemid}', Checklist::class . '@update');
