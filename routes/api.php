@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\Checklist;
 use App\Http\Controllers\Products;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -24,7 +25,10 @@ Route::post('/login', AuthController::class . '@login');
 Route::get('/logout', AuthController::class . '@logout');
 Route::group(['middleware' => ['jwt.verify']], function() {
 
-    Route::get('/checklist', Products::class . '@index');
-    Route::post('/checklist', Products::class . '@create');
+    // Route::get('/checklist', Products::class . '@index');
+    // Route::post('/checklist', Products::class . '@create');
+    Route::get('/checklist', Checklist::class . '@index');
+    Route::post('/checklist', Checklist::class . '@create');
+    Route::delete('/checklist/{id}', Checklist::class . '@destroy');
 
 });

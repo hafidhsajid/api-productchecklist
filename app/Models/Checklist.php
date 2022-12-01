@@ -8,4 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class Checklist extends Model
 {
     use HasFactory;
+
+    protected $fillable =[
+        'name',
+    ];
 }
