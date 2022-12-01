@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ChecklistItem as ModelsChecklistItem;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 
 class Checklistitem extends Controller
@@ -14,6 +16,12 @@ class Checklistitem extends Controller
     public function index()
     {
         //
+        $data = ModelsChecklistItem::all();
+
+        return response()->json([
+            'message' => 'Checklist item index',
+            'data' => $data
+        ], 200);
     }
 
     /**
@@ -21,9 +29,26 @@ class Checklistitem extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
         //
+
+        $validator = Validator::make($request->all(), [
+            'name' => 'required',
+            'checklist_id' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $validator->errors()->first()
+            ], 400);
+        }
+        $data = \App\Models\Checklist::create($request->all());
+        return response()->json([
+            'message' => 'Checklist created',
+            'data' => $data
+        ], 201);
     }
 
     /**
